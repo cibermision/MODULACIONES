@@ -37,8 +37,8 @@
             position: relative;
         }
 
-        /* Canvas interactivo de fondo */
-        #visualizer-canvas {
+        /* Fondo: mosaico WebGL (ASCII / halftone / dither / pixelate) */
+        #mosaic-canvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -46,6 +46,7 @@
             height: 100vh;
             z-index: -1;
             pointer-events: none;
+            opacity: 0.5;
         }
 
         .container {
@@ -111,29 +112,19 @@
             color: var(--accent-color);
         }
 
-        /* Botón de Sonido */
-        .audio-trigger {
-            background: rgba(138, 115, 255, 0.1);
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-family: var(--font-heading);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .audio-trigger:hover {
-            background: var(--accent-color);
-            color: var(--bg-color);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
         /* Hero */
         .hero {
-            padding: 100px 0 60px 0;
+            margin: 80px 0 60px 0;
+            padding: 44px 40px;
             max-width: 900px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+        }
+
+        @media (max-width: 600px) {
+            .hero { margin: 48px 0 40px 0; padding: 28px 22px; }
         }
 
         .hero h1 {
@@ -264,12 +255,148 @@
             border: 1px solid var(--card-border);
         }
 
+        /* Equipo: nombres en fila + ventana emergente con la bio */
+        .crew-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .crew-tab {
+            flex: 1 1 170px;
+            padding: 20px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            color: var(--text-bright);
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .crew-tab:hover { border-color: var(--accent-color); transform: translateY(-2px); box-shadow: 0 0 18px var(--accent-glow); }
+        .crew-tab:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 3px; }
+
+        #crew.has-tabs .accordion-item { display: none; }
+
+        .crew-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(13, 13, 17, 0.78);
+            backdrop-filter: blur(6px);
+            overflow-y: auto;
+            animation: crewFade 0.2s ease;
+        }
+        .crew-modal[hidden] { display: none; }
+
+        .crew-modal-box {
+            position: relative;
+            width: 100%;
+            max-width: 760px;
+            max-height: calc(100vh - 48px);
+            overflow-y: auto;
+            padding: 32px 32px 28px;
+            background: rgba(22, 22, 29, 0.97);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .crew-modal-box h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--text-bright);
+            margin: 0 40px 20px 0;
+        }
+
+        .crew-modal-close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--card-border);
+            border-radius: 50%;
+            background: none;
+            color: var(--text-bright);
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+        .crew-modal-close:hover { border-color: var(--accent-color); color: var(--accent-color); }
+        .crew-modal-close:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 2px; }
+
+        .crew-modal .crew-layout { grid-template-columns: 160px 1fr; padding-bottom: 0; }
+
+        @keyframes crewFade { from { opacity: 0; } to { opacity: 1; } }
+
+        @media (max-width: 768px) {
+            .crew-modal { align-items: flex-start; padding: 16px; }
+            .crew-modal-box { padding: 24px 20px; max-height: none; }
+            .crew-modal .crew-layout { grid-template-columns: 1fr; }
+            .crew-modal .crew-img { max-width: 160px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .crew-modal { animation: none; }
+            .crew-tab { transition: none; }
+        }
+
         .social-link {
             display: inline-block;
             margin-top: 12px;
             color: var(--accent-color);
             text-decoration: none;
             font-weight: 500;
+        }
+
+        /* Contacto en fila */
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .contact-item {
+            flex: 1 1 220px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            text-decoration: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .contact-item:hover { border-color: var(--accent-color); }
+        .contact-item .icon, .social-link .icon { color: var(--accent-color); flex-shrink: 0; display: block; }
+        .social-link { transition: opacity 0.2s ease; }
+        .social-link:hover { opacity: 0.75; }
+
+        .contact-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            color: var(--text-bright);
+        }
+
+        .contact-value {
+            color: var(--accent-color);
+            font-weight: 500;
+            overflow-wrap: anywhere;
         }
 
         .antecedentes-list {
@@ -326,7 +453,6 @@
     
         /* Primera pantalla (como index2) */
         html { scroll-behavior: smooth; }
-        .audio-trigger { position: fixed; bottom: 16px; right: 16px; z-index: 200; background: rgba(21,21,29,.85); }
         .cover { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; position: relative; text-align: center; }
         .cover .logo { width: min(82vw, 760px); height: auto; max-height: 55svh; object-fit: contain; }
         .chev { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: var(--text-bright); display: block; width: 48px; height: 48px; }
@@ -356,12 +482,15 @@
     </style>
 </head>
 <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+</svg>
 
-    <canvas id="visualizer-canvas"></canvas>
 
-    <button class="audio-trigger" id="audioBtn">
-                <span id="audioStatus">Radio Modulaciones</span>
-            </button>
+    <canvas id="mosaic-canvas" aria-hidden="true"></canvas>
+
     <section class="cover"><div class="cover-logo"><img class="logo" src="imagenes/logo/logo.png" alt="Modulaciones"></div><a class="chev" href="#hero" aria-label="Seguir bajando"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 12l16 14 16-14M8 24l16 14 16-14"/></svg></a></section>
     <header>
         <div class="container nav-wrapper">
@@ -458,7 +587,7 @@
                             <p>Con una amplia trayectoria dentro de la escena electrónica independiente, su trabajo se mueve entre el techno, el micro minimal y el dubby techno, con una marcada inclinación hacia la experimentación analógica. Actualmente centra su práctica en la creación musical a través de un sistema Eurorack modular, donde la improvisación y la síntesis sustractiva definen una estética basada en el control del voltaje y la interacción física con el sonido.</p><br>
                             <p>Inició su carrera en los años 90 con Formula 3000, proyecto con el que editó álbumes clave como Señor La Muerte, 3000 Lapsus de Muerte y Perfectos Ojos Rojos, en sellos como TSD Records, EPSA Music y Manteca Records. Posteriormente formó parte de Dawy y Los Estrellados, Las Bodas Químicas y Da_Club, ampliando su búsqueda hacia formatos híbridos entre electrónica, canción y performance. Entre sus lanzamientos más recientes se destacan Pulso de Vida (2019), Gravedad de Ley (2021), Onna Bugeisha (2022), Razones Poderosas (2024) y Troter 1Volt/Oct (2024).</p><br>
                             <p>Ha realizado residencias artísticas en espacios como Iodice (España), Zeroh, Tigra y Soma, colaborando con artistas de la escena experimental iberoamericana. En sus presentaciones en vivo, Collado concibe el set como una estructura abierta donde el ritmo y la textura emergen del diálogo entre gesto humano y máquina. Su trabajo busca recuperar el espíritu original de la electrónica: la creación de música como energía tangible, como voltaje transformado en frecuencia y movimiento.</p>
-                            <a href="https://www.instagram.com/roco_collado" target="_blank" class="social-link">@roco_collado</a>
+                            <a href="https://www.instagram.com/roco_collado" target="_blank" rel="noopener" class="social-link" aria-label="Instagram @roco_collado" title="@roco_collado"><svg class="icon" width="28" height="28"><use href="#i-instagram"/></svg></a>
                         </div>
                     </div>
                 </div>
@@ -477,7 +606,7 @@
                             <p>Bianca Leveroni es artista visual y VJ, formada en la Universidad Nacional de las Artes (UNA), con especialización en artes audiovisuales. Desarrolla su trabajo en el campo del audiovisual en vivo, articulando práctica artística, operación técnica y formación académica.</p><br>
                             <p>Se desempeña como operadora profesional en teatros y espectáculos en vivo, participando en producciones musicales y escénicas de mediana y gran escala, tanto a nivel nacional como internacional, con experiencia en distintos países del Cono Sur. Su rol abarca la operación de sistemas complejos de proyección y control, la coordinación técnica con otros equipos y la integración de imagen en contextos performáticos diversos.</p><br>
                             <p>En paralelo, desarrolla una actividad docente sostenida vinculada al VJing y a la creación visual en tiempo real, dictando clases y espacios de formación donde aborda herramientas, flujos de trabajo y criterios técnicos aplicados al vivo. Su práctica se apoya en conocimientos técnicos avanzados, una comprensión profunda de los entornos profesionales de producción y una mirada crítica sobre el rol del audiovisual en escena.</p>
-                            <a href="https://www.instagram.com/bianca.leveroni/" target="_blank" class="social-link">@bianca.leveroni</a>
+                            <a href="https://www.instagram.com/bianca.leveroni/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram @bianca.leveroni" title="@bianca.leveroni"><svg class="icon" width="28" height="28"><use href="#i-instagram"/></svg></a>
                         </div>
                     </div>
                 </div>
@@ -497,7 +626,7 @@
                             <p>En el directo, su enfoque es plenamente performático. Parte de ideas mínimas —patrones rítmicos, gestos simples, relaciones básicas entre señales— y desarrolla sus piezas en tiempo real a través del uso de hardware y máquinas. El set no se basa en secuencias cerradas ni material predefinido, sino en la construcción progresiva del sonido, con una clara preferencia por lo táctil y lo físico frente a la computadora como interfaz.</p><br>
                             <p>Esta relación directa con el sonido se extiende al diseño y la construcción de sus propios instrumentos experimentales. Cada dispositivo es único y artesanal, pensado no solo como herramienta técnica sino como parte activa del proceso creativo. Estos instrumentos constituyen el núcleo de sus presentaciones en vivo y, al mismo tiempo, están disponibles para otros músicos, ampliando su práctica hacia una dimensión colectiva y compartida.</p><br>
                             <p>En su trabajo, la figura del compositor, el intérprete y el artesano se superpone constantemente. La música, el instrumento y el gesto forman un mismo sistema, donde crear implica también construir las condiciones materiales que hacen posible el sonido.</p>
-                            <a href="https://www.instagram.com/lihuelsosa" target="_blank" class="social-link">@lihuelsosa</a>
+                            <a href="https://www.instagram.com/lihuelsosa" target="_blank" rel="noopener" class="social-link" aria-label="Instagram @lihuelsosa" title="@lihuelsosa"><svg class="icon" width="28" height="28"><use href="#i-instagram"/></svg></a>
                         </div>
                     </div>
                 </div>
@@ -506,7 +635,7 @@
             <!-- Dan Chelger -->
             <div class="accordion-item">
                 <button class="accordion-header">
-                    <span>Dan Chenger</span>
+                    <span>Dan Chelger</span>
                     <span>▼</span>
                 </button>
                 <div class="accordion-content">
@@ -517,7 +646,7 @@
                             <p>Su práctica artística se centra en la síntesis de video, entendida como un lenguaje visual autónomo. Combina hardware —sintetizadores, procesadores, desarrollos DIY— con entornos digitales de su propia autoría, incluyendo plugins y sistemas de videosíntesis que expanden la experiencia del hardware al software. Ha presentado obras en CCEBA y Tecnópolis, y participado en festivales y eventos como Intermediale (Polonia), UMF, Aleatorio, Teorema, Videonica, Flashparty, Buenos Aires Outrun y DVNE Park.</p><br>
                             <p>Fue docente durante más de diez años en TEA Imagen, dictó clases en la Escuela de Creativos Publicitarios y en la Universidad Abierta Interamericana (UAI). También brindó talleres de videosíntesis analógica y performance audiovisual en instituciones como el CCK y Espacio Pla.</p><br>
                             <p>Su obra se difunde internacionalmente a través de loops visuales generados con diversas técnicas analógicas y digitales en Resolume, Shutterstock, Adobe Stock y Getty, junto con una línea de plugins gratuitos y comerciales para Resolume Arena y Avenue, disponibles en Juicebar.</p>
-                            <a href="https://www.instagram.com/dan.chelger/" target="_blank" class="social-link">@dan.chelger</a>
+                            <a href="https://www.instagram.com/dan.chelger/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram @dan.chelger" title="@dan.chelger"><svg class="icon" width="28" height="28"><use href="#i-instagram"/></svg></a>
                         </div>
                     </div>
                 </div>
@@ -533,13 +662,12 @@
                     <div class="crew-layout">
                         <img src="imagenes/equipo/evangelina.jpg" alt="Evangelina Moldú" class="crew-img" onerror="this.src='https://via.placeholder.com/300x300/16161d/8A73FF?text=Evangelina+Moldu'">
                         <div>
-                            <p>Evangelina Moldú es artista multimedial y electrónica, nacida en Puerto Madryn, Argentina.</p><br>
-                            <p>Estudió Artes del Movimiento y desarrolló su práctica en torno a la performance en eventos y espectáculos como bailarina y coreógrafa en productoras como Fuerza Bruta. Formó parte de espacios de gestión cultural y proyectos vinculados a la escena de la música electrónica, como fiestas, radio y difusión de artistas.</p><br>
-                            <p>Se desempeña como videoartista y editora tras varios años de formación en Artes Audiovisuales, con especialización en montaje.</p><br>
-                            <p>Actualmente cursa el último año de la Licenciatura en Artes Multimediales y Electrónicas en la Universidad Nacional de las Artes (UNA), donde también se desempeña como ayudante en la materia Proyecto Visual 3.</p><br>
-                            <p>Su práctica cruza lo sonoro, lo visual y lo performático, desde la programación, la síntesis de audio, la instalación, el video, la construcción de sus propias herramientas e interfaces, integrando procesos digitales y analógicos como partes de un mismo sistema.</p><br>
-                            <p>Explora la imagen como materia en tránsito: pasada de soporte en soporte hasta inscribir un indicio deformado de lo que existió. La pantalla como umbral entre lo perceivedo, lo recordado y lo imaginado, donde la mediación no recupera la memoria sino que la reescribe.</p>
-                            <a href="https://www.instagram.com/sinergy________/" target="_blank" class="social-link">@sinergy________</a>
+                            <p>Evangelina Moldú es artista multimedial y electrónica. Nació en Puerto Madryn, Argentina.</p><br>
+                            <p>Su práctica cruza lo sonoro, lo visual y lo performático. Trabaja con programación, síntesis de audio, instalación y video, y construye sus propias herramientas e interfaces. Los procesos digitales y analógicos son para ella parte de un mismo sistema.</p><br>
+                            <p>Explora la imagen como materia en tránsito: pasada de soporte en soporte hasta inscribir un indicio deformado de lo que existió. La pantalla funciona como umbral entre lo percibido, lo recordado y lo imaginado, y en ese umbral la mediación no recupera la memoria sino que la reescribe.</p><br>
+                            <p>Se formó en Artes del Movimiento y desarrolló su camino en la performance como bailarina y coreógrafa en eventos y espectáculos, en productoras como Fuerza Bruta. Participó en espacios de gestión cultural y en proyectos de la escena de música electrónica: fiestas, radio y difusión de artistas. Tras varios años de formación en Artes Audiovisuales, con especialización en montaje, trabaja también como videoartista y editora.</p><br>
+                            <p>Actualmente cursa el último año de la Licenciatura en Artes Multimediales y Electrónicas en la Universidad Nacional de las Artes (UNA), donde es ayudante en Proyecto Visual 3.</p>
+                            <a href="https://www.instagram.com/sinergy________/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram @sinergy________" title="@sinergy________"><svg class="icon" width="28" height="28"><use href="#i-instagram"/></svg></a>
                         </div>
                     </div>
                 </div>
@@ -549,16 +677,16 @@
         <!-- Contacto y Apoyos -->
         <section id="contacto">
             <h2 class="section-title">Contacto</h2>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-                <div class="glass-card">
-                    <h3 style="color: var(--text-bright); margin-bottom: 12px;">Contacto</h3>
-                    <p>Email: <a href="mailto:pulso.cue@gmail.com" style="color: var(--accent-color);">pulso.cue@gmail.com</a></p>
-                    <p style="margin-top: 8px;">
-                        Instagram: <a href="https://www.instagram.com/modulaciones.ar/" target="_blank" style="color: var(--accent-color);">@modulaciones.ar</a><br>
-                        YouTube: <a href="https://www.youtube.com/@Modulaciones" target="_blank" style="color: var(--accent-color);">@Modulaciones</a>
-                    </p>
-                </div>
-            
+            <div class="contact-row">
+                <a class="contact-item" href="mailto:pulso.cue@gmail.com">
+                    <svg class="icon" width="28" height="28"><use href="#i-mail"/></svg><span class="contact-value">pulso.cue@gmail.com</span>
+                </a>
+                <a class="contact-item" href="https://www.instagram.com/modulaciones.ar/" aria-label="Instagram @modulaciones.ar" title="@modulaciones.ar" target="_blank" rel="noopener">
+                    <svg class="icon" width="28" height="28"><use href="#i-instagram"/></svg><span class="contact-value">Instagram</span>
+                </a>
+                <a class="contact-item" href="https://www.youtube.com/@Modulaciones" aria-label="YouTube @Modulaciones" title="@Modulaciones" target="_blank" rel="noopener">
+                    <svg class="icon" width="28" height="28"><use href="#i-youtube"/></svg><span class="contact-value">YouTube</span>
+                </a>
             </div>
         </section>
     </main>
@@ -586,104 +714,6 @@
                 }
             });
         });
-
-        // Generador de audio y visualizador reactivo de fondo
-        const canvas = document.getElementById('visualizer-canvas');
-        const ctx = canvas.getContext('2d');
-        let width = canvas.width = window.innerWidth;
-        let height = canvas.height = window.innerHeight;
-
-        window.addEventListener('resize', () => {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        });
-
-        let audioCtx, oscillator, analyser, dataArray;
-        let isAudioPlaying = false;
-        const audioBtn = document.getElementById('audioBtn');
-        const audioStatus = document.getElementById('audioStatus');
-
-        function initAudio() {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            analyser = audioCtx.createAnalyser();
-            analyser.fftSize = 64;
-
-            oscillator = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-
-            oscillator.type = 'sine';
-            oscillator.frequency.setValueAtTime(110, audioCtx.currentTime);
-
-            const lfo = audioCtx.createOscillator();
-            lfo.frequency.setValueAtTime(0.2, audioCtx.currentTime);
-            const lfoGain = audioCtx.createGain();
-            lfoGain.gain.setValueAtTime(15, audioCtx.currentTime);
-
-            lfo.connect(oscillator.frequency);
-            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-
-            oscillator.connect(gain);
-            gain.connect(analyser);
-            analyser.connect(audioCtx.destination);
-
-            oscillator.start();
-            lfo.start();
-
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-        }
-
-        audioBtn.addEventListener('click', () => {
-            if (!audioCtx) {
-                initAudio();
-                isAudioPlaying = true;
-                audioStatus.textContent = "Detener Sonido";
-            } else if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-                isAudioPlaying = true;
-                audioStatus.textContent = "Detener Sonido";
-            } else if (audioCtx.state === 'running') {
-                audioCtx.suspend();
-                isAudioPlaying = false;
-                audioStatus.textContent = "Activar Sonido";
-            }
-        });
-
-        let time = 0;
-        function render() {
-            ctx.fillStyle = 'rgba(13, 13, 17, 0.25)';
-            ctx.fillRect(0, 0, width, height);
-
-            let audioImpact = 0;
-            if (isAudioPlaying && analyser) {
-                analyser.getByteFrequencyData(dataArray);
-                let sum = 0;
-                for (let i = 0; i < dataArray.length; i++) {
-                    sum += dataArray[i];
-                }
-                audioImpact = sum / dataArray.length;
-            }
-
-            ctx.lineWidth = 1.5;
-            ctx.strokeStyle = `rgba(138, 115, 255, ${0.15 + audioImpact / 255})`;
-            ctx.beginPath();
-
-            const lines = 6;
-            for (let j = 0; j < lines; j++) {
-                ctx.moveTo(0, height / 2);
-                for (let x = 0; x < width; x += 15) {
-                    const wave1 = Math.sin(x * 0.003 + time + j * 0.3) * (25 + audioImpact * 0.4);
-                    const wave2 = Math.cos(x * 0.001 - time * 0.4) * 40;
-                    const y = height / 2 + wave1 + wave2 + (j - lines / 2) * 50;
-                    ctx.lineTo(x, y);
-                }
-            }
-            ctx.stroke();
-
-            time += 0.015;
-            requestAnimationFrame(render);
-        }
-
-        render();
     </script>
 <script>
 (function(){var b=document.getElementById('menuBtn'),m=document.getElementById('menu');
@@ -693,5 +723,418 @@ m.addEventListener('click',function(e){if(e.target.closest('a'))set(false);});
 document.addEventListener('click',function(e){if(!m.contains(e.target))set(false);});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'){set(false);b.focus();}});})();
 </script>
+
+    <script>
+        // Equipo: nombres en fila; al tocar uno se abre una ventana con foto, bio e Instagram
+        (function () {
+            const crew = document.getElementById('crew');
+            if (!crew) return;
+            const items = Array.from(crew.querySelectorAll('.accordion-item'));
+            if (!items.length) return;
+
+            // Ventana emergente (una sola, se reutiliza)
+            const modal = document.createElement('div');
+            modal.className = 'crew-modal';
+            modal.hidden = true;
+            modal.setAttribute('role', 'dialog');
+            modal.setAttribute('aria-modal', 'true');
+            modal.setAttribute('aria-labelledby', 'crewModalTitle');
+            modal.innerHTML = '<div class="crew-modal-box">' +
+                '<button type="button" class="crew-modal-close" aria-label="Cerrar">&times;</button>' +
+                '<h3 id="crewModalTitle"></h3><div class="crew-modal-body"></div></div>';
+            document.body.appendChild(modal);
+
+            const box = modal.querySelector('.crew-modal-box');
+            const title = modal.querySelector('h3');
+            const body = modal.querySelector('.crew-modal-body');
+            const closeBtn = modal.querySelector('.crew-modal-close');
+            let opener = null;
+
+            function open(item, name, btn) {
+                opener = btn;
+                title.textContent = name;
+                body.innerHTML = '';
+                body.appendChild(item.querySelector('.crew-layout').cloneNode(true));
+                modal.hidden = false;
+                box.scrollTop = 0;
+                document.body.style.overflow = 'hidden';
+                closeBtn.focus();
+            }
+
+            function close() {
+                if (modal.hidden) return;
+                modal.hidden = true;
+                document.body.style.overflow = '';
+                if (opener) opener.focus();
+            }
+
+            closeBtn.addEventListener('click', close);
+            modal.addEventListener('click', e => { if (e.target === modal) close(); });
+            document.addEventListener('keydown', e => {
+                if (modal.hidden) return;
+                if (e.key === 'Escape') { close(); return; }
+                if (e.key === 'Tab') {
+                    const f = modal.querySelectorAll('button, a[href]');
+                    const first = f[0], last = f[f.length - 1];
+                    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+                }
+            });
+
+            // Fila de nombres
+            const tabs = document.createElement('div');
+            tabs.className = 'crew-tabs';
+            items.forEach(item => {
+                const name = item.querySelector('.accordion-header span').textContent.trim();
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'crew-tab';
+                b.textContent = name;
+                b.setAttribute('aria-haspopup', 'dialog');
+                b.addEventListener('click', () => open(item, name, b));
+                tabs.appendChild(b);
+            });
+            crew.insertBefore(tabs, items[0]);
+            crew.classList.add('has-tabs');
+        })();
+    </script>
+
+    <script>
+        // Fondo: Grid Mosaic en WebGL (adaptado de test_grid_mosaic.html)
+        (function () {
+            const cv = document.getElementById('mosaic-canvas');
+            const gl = cv.getContext('webgl', { premultipliedAlpha: false, antialias: false });
+            if (!gl) { cv.style.display = 'none'; return; }
+
+            // ---- Ajustes (tocá acá) ----
+            const COLS = 6, ROWS = 7;      // bloques de la grilla
+            const SCALE_MIN = 10, SCALE_MAX = 120;
+            const MODE = 0;                // 0 = ciclo aleatorio, 1 = clean, 2 = halftone, 3 = dither, 4 = pixelate, 5 = ASCII, 6 = crosshatch, 7 = cross stitch, 8 = tone geometry, 9 = pixel press
+            const SPEED = 0.4;             // velocidad general
+            const GAIN = 0.85;             // brillo del efecto
+            const RES = 0.6;               // resolución interna (1 = nítido, menos = más liviano)
+            const FPS = 30;
+            // La opacidad general se cambia en el CSS de #mosaic-canvas
+            // -----------------------------
+
+            const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const FRAG_SRC = `
+  precision highp float;
+  varying vec2 vUv;
+
+  uniform vec2 u_resolution;
+  uniform float u_time;
+  uniform bool u_invert;
+  uniform float u_gain;
+
+  uniform vec2 u_blockCount;
+  uniform float u_scaleMin;
+  uniform float u_scaleMax;
+  uniform int u_scaleDirection;
+
+  uniform vec3 u_inkColor;
+  uniform vec3 u_paperColor;
+
+  uniform float u_effectMix;
+  uniform float u_contrast;
+  uniform float u_gamma;
+  uniform bool u_animate;
+  uniform int u_effectMode;
+  uniform bool u_realColor;
+
+
+  // Fuente procedural (reemplaza la textura de video): campo animado en violetas
+  vec3 srcColor(vec2 uv) {
+    float aspect = u_resolution.x / u_resolution.y;
+    vec2 p = vec2(uv.x * aspect, uv.y);
+    float t = u_time;
+    float f = 0.5 + 0.5 * sin(p.x * 2.6 + t * 0.9 + sin(p.y * 3.1 - t * 0.7) * 1.6);
+    vec2 c = vec2(aspect * (0.5 + 0.25 * sin(t * 0.37)), 0.5 + 0.22 * cos(t * 0.53));
+    f += 0.45 * (0.5 + 0.5 * sin(length(p - c) * 7.0 - t * 1.4));
+    f = clamp(f * 0.62, 0.0, 1.0);
+    float h = 0.5 + 0.5 * sin(p.x * 1.3 - p.y * 1.7 + t * 0.4);
+    vec3 deep = vec3(0.10, 0.08, 0.22);
+    vec3 violet = vec3(0.54, 0.45, 1.0);
+    vec3 lilac = vec3(0.86, 0.82, 1.0);
+    vec3 teal = vec3(0.35, 0.80, 0.85);
+    vec3 col = mix(deep, mix(violet, teal, h * 0.45), smoothstep(0.1, 0.7, f));
+    col = mix(col, lilac, smoothstep(0.75, 1.0, f));
+    return col * (0.1 + 0.9 * f);
+  }
+
+  float bayer4(vec2 uv) {
+    vec2 p = floor(mod(uv, 4.0));
+    int x = int(p.x);
+    int y = int(p.y);
+    if (y == 0) { if (x == 0) return 0.0/16.0; if (x == 1) return 8.0/16.0; if (x == 2) return 2.0/16.0; return 10.0/16.0; }
+    if (y == 1) { if (x == 0) return 12.0/16.0; if (x == 1) return 4.0/16.0; if (x == 2) return 14.0/16.0; return 6.0/16.0; }
+    if (y == 2) { if (x == 0) return 3.0/16.0; if (x == 1) return 11.0/16.0; if (x == 2) return 1.0/16.0; return 9.0/16.0; }
+    if (x == 0) return 15.0/16.0; if (x == 1) return 7.0/16.0; if (x == 2) return 13.0/16.0; return 5.0/16.0;
+  }
+
+  float getLuminance(vec3 color) {
+    float l = dot(color, vec3(0.299, 0.587, 0.114));
+    l = pow(l, u_gamma);
+    l = (l - 0.5) * u_contrast + 0.5;
+    l = clamp(l, 0.0, 1.0);
+    return u_invert ? 1.0 - l : l;
+  }
+
+  // Tono final de una celda/máscara: si Color Real está activo, el "ink" deja
+  // de ser un color único y pasa a ser el color real capturado en esa celda.
+  vec3 tone(vec3 realCellColor, float mask) {
+    vec3 ink = u_realColor ? realCellColor : u_inkColor;
+    return mix(u_paperColor, ink, mask);
+  }
+
+  vec3 applyHalftone(vec2 uv, float scale) {
+    vec2 grid = uv * scale;
+    vec2 p = fract(grid) - 0.5;
+    vec2 id = floor(grid) / scale;
+    vec3 cellColor = srcColor(id);
+    float l = getLuminance(cellColor);
+    float r = (1.0 - l) * 0.6;
+    float dist = length(p);
+    float mask = smoothstep(r, r - 0.05, dist);
+    return tone(cellColor, mask);
+  }
+
+  vec3 applyDither(vec2 uv, float scale) {
+    vec3 cellColor = srcColor(uv);
+    float l = getLuminance(cellColor);
+    float threshold = bayer4(gl_FragCoord.xy / (scale * 0.05));
+    float mask = l < threshold ? 1.0 : 0.0;
+    return tone(cellColor, mask);
+  }
+
+  vec3 applyPixelate(vec2 uv, float scale) {
+    vec2 grid = floor(uv * scale) / scale;
+    vec3 cellColor = srcColor(grid);
+    float l = getLuminance(cellColor);
+    float q = floor(l * 3.0) / 2.0;
+    return tone(cellColor, 1.0 - q);
+  }
+
+  float character(int id, vec2 p) {
+    vec2 i = floor(p * vec2(3.0, 5.0));
+    int bit = int(i.x + (4.0 - i.y) * 3.0);
+
+    int mask = 0;
+    if (id == 1) mask = 8192;
+    else if (id == 2) mask = 1040;
+    else if (id == 3) mask = 9402;
+    else if (id == 4) mask = 31727;
+    else if (id == 5) mask = 32767;
+
+    float res = 0.0;
+    float pow2 = 1.0;
+    for (int b = 0; b < 15; b++) {
+      if (b == bit) {
+        res = mod(floor(float(mask) / pow2), 2.0);
+        break;
+      }
+      pow2 *= 2.0;
+    }
+    return res;
+  }
+
+  vec3 applyASCII(vec2 uv, float scale) {
+    float charScale = scale * 0.5;
+    vec2 gridRes = vec2(charScale * (u_resolution.x / u_resolution.y) * 1.6, charScale);
+    vec2 grid = uv * gridRes;
+    vec2 p = fract(grid);
+    vec2 id = floor(grid) / gridRes;
+
+    vec3 cellColor = srcColor(id);
+    float l = getLuminance(cellColor);
+    int charId = int(clamp((1.0 - l) * 5.99, 0.0, 5.0));
+
+    float mask = character(charId, p);
+    return tone(cellColor, mask);
+  }
+
+  float hatchLine(vec2 uv, float scale, float angle, float thickness) {
+    vec2 pr = uv * scale;
+    float ca = cos(angle), sa = sin(angle);
+    vec2 r = vec2(pr.x*ca - pr.y*sa, pr.x*sa + pr.y*ca);
+    float ln = abs(fract(r.y) - 0.5);
+    return smoothstep(thickness, thickness - 0.06, ln);
+  }
+  vec3 applyCrosshatch(vec2 uv, float scale) {
+    vec3 cellColor = srcColor(uv);
+    float l = getLuminance(cellColor);
+    float density = 1.0 - l;
+    float hs = scale * 2.6;
+    float mask = hatchLine(uv, hs, 0.7854, 0.16) * step(0.12, density);
+    mask = max(mask, hatchLine(uv, hs, -0.7854, 0.16) * step(0.42, density));
+    mask = max(mask, hatchLine(uv, hs, 0.0, 0.16) * step(0.68, density));
+    mask = max(mask, hatchLine(uv, hs, 1.5708, 0.16) * step(0.88, density));
+    return tone(cellColor, mask);
+  }
+
+  vec3 applyCrossStitch(vec2 uv, float scale) {
+    vec2 grid = uv * scale;
+    vec2 p = fract(grid) - 0.5;
+    vec2 id = floor(grid) / scale;
+    vec3 cellColor = srcColor(id);
+    float l = getLuminance(cellColor);
+    float sz = (1.0 - l) * 0.42;
+    float thick = 0.15;
+    float d1 = abs(p.x - p.y) * 0.7071;
+    float d2 = abs(p.x + p.y) * 0.7071;
+    float inBounds = step(abs(p.x), sz) * step(abs(p.y), sz);
+    float mask = clamp(smoothstep(thick, thick-0.06, d1) + smoothstep(thick, thick-0.06, d2), 0.0, 1.0) * inBounds;
+    return tone(cellColor, mask);
+  }
+
+  vec3 applyToneGeometry(vec2 uv, float scale) {
+    vec2 grid = uv * scale;
+    vec2 p = fract(grid) - 0.5;
+    vec2 id = floor(grid);
+    vec2 idn = id / scale;
+    vec3 cellColor = srcColor(idn);
+    float l = getLuminance(cellColor);
+    float sz = (1.0 - l) * 0.62;
+    float shapeSel = mod(id.x + id.y, 3.0);
+    float mask;
+    if (shapeSel < 1.0) {
+      mask = step(abs(p.x), sz*0.5) * step(abs(p.y), sz*0.5);
+    } else if (shapeSel < 2.0) {
+      mask = step(abs(p.x) + abs(p.y), sz*0.62);
+    } else {
+      mask = step(length(p), sz*0.55);
+    }
+    return tone(cellColor, mask);
+  }
+
+  vec3 applyPixelPress(vec2 uv, float scale) {
+    vec2 grid = floor(uv * scale) / scale;
+    vec3 cellColor = srcColor(grid);
+    float l = getLuminance(cellColor);
+    float levels = 4.0;
+    float q = floor(l * levels) / (levels - 1.0);
+    vec2 cellUv = fract(uv * scale);
+    float edge = smoothstep(0.0, 0.07, cellUv.x) * smoothstep(1.0, 0.93, cellUv.x)
+               * smoothstep(0.0, 0.07, cellUv.y) * smoothstep(1.0, 0.93, cellUv.y);
+    vec3 base = tone(cellColor, 1.0 - q);
+    return base * mix(0.8, 1.0, edge);
+  }
+
+  void main() {
+    vec2 uv = vUv;
+
+    vec2 blockId = floor(uv * u_blockCount);
+
+    float p = 0.0;
+    vec2 normBlock = blockId / max(u_blockCount - 1.0, vec2(1.0));
+    if (u_scaleDirection == 0) p = normBlock.x;
+    else if (u_scaleDirection == 1) p = 1.0 - normBlock.y;
+    else if (u_scaleDirection == 2) p = distance(normBlock, vec2(0.5)) * 1.414;
+    else p = (normBlock.x + (1.0 - normBlock.y)) * 0.5;
+
+    float scale = mix(u_scaleMin, u_scaleMax, clamp(p, 0.0, 1.0));
+
+    if (u_animate) {
+      scale *= 1.0 + 0.15 * sin(u_time * 2.0 + blockId.x * 0.5 + blockId.y * 0.3);
+    }
+
+    float effectSeed = fract(sin(dot(blockId, vec2(12.9898, 78.233))) * 43758.5453);
+    float effectType = mod(floor(effectSeed * 5.0 + u_effectMix + (u_animate ? u_time * 0.5 : 0.0)), 5.0);
+
+    if (u_effectMode > 0) {
+      effectType = float(u_effectMode - 1);
+    }
+
+    vec3 color;
+    if (effectType < 1.0) {
+      vec3 rawColor = srcColor(uv);
+      color = u_realColor ? rawColor : mix(u_inkColor, u_paperColor, getLuminance(rawColor));
+    } else if (effectType < 2.0) {
+      color = applyHalftone(uv, scale);
+    } else if (effectType < 3.0) {
+      color = applyDither(uv, scale);
+    } else if (effectType < 4.0) {
+      color = applyPixelate(uv, scale);
+    } else if (effectType < 5.0) {
+      color = applyASCII(uv, scale);
+    } else if (effectType < 6.0) {
+      color = applyCrosshatch(uv, scale);
+    } else if (effectType < 7.0) {
+      color = applyCrossStitch(uv, scale);
+    } else if (effectType < 8.0) {
+      color = applyToneGeometry(uv, scale);
+    } else {
+      color = applyPixelPress(uv, scale);
+    }
+
+    gl_FragColor = vec4(color * u_gain, 1.0);
+  }
+`;
+
+            function mk(type, src) {
+                const s = gl.createShader(type);
+                gl.shaderSource(s, src); gl.compileShader(s);
+                if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) console.error(gl.getShaderInfoLog(s));
+                return s;
+            }
+            const prog = gl.createProgram();
+            gl.attachShader(prog, mk(gl.VERTEX_SHADER, 'attribute vec2 aPos; varying vec2 vUv; void main(){ vUv = aPos*0.5+0.5; gl_Position = vec4(aPos,0.0,1.0); }'));
+            gl.attachShader(prog, mk(gl.FRAGMENT_SHADER, FRAG_SRC));
+            gl.linkProgram(prog);
+            if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) { console.error(gl.getProgramInfoLog(prog)); cv.style.display = 'none'; return; }
+            gl.useProgram(prog);
+
+            const buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+            const aPos = gl.getAttribLocation(prog, 'aPos');
+            gl.enableVertexAttribArray(aPos);
+            gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+            const U = n => gl.getUniformLocation(prog, n);
+            const uRes = U('u_resolution'), uTime = U('u_time');
+
+            gl.uniform2f(U('u_blockCount'), COLS, ROWS);
+            gl.uniform1f(U('u_scaleMin'), SCALE_MIN);
+            gl.uniform1f(U('u_scaleMax'), SCALE_MAX);
+            gl.uniform1i(U('u_scaleDirection'), 2);
+            gl.uniform3f(U('u_inkColor'), 0.54, 0.45, 1.0);
+            gl.uniform3f(U('u_paperColor'), 0.05, 0.05, 0.07);
+            gl.uniform1f(U('u_effectMix'), 0.9);
+            gl.uniform1f(U('u_contrast'), 0.9);
+            gl.uniform1f(U('u_gamma'), 1.4);
+            gl.uniform1i(U('u_animate'), reduced ? 0 : 1);
+            gl.uniform1i(U('u_effectMode'), MODE);
+            gl.uniform1i(U('u_realColor'), 1);
+            gl.uniform1i(U('u_invert'), 1);
+            gl.uniform1f(U('u_gain'), GAIN);
+
+            function resize() {
+                cv.width = Math.max(2, Math.round(window.innerWidth * RES));
+                cv.height = Math.max(2, Math.round(window.innerHeight * RES));
+                gl.viewport(0, 0, cv.width, cv.height);
+                gl.uniform2f(uRes, cv.width, cv.height);
+                if (reduced) draw(0);
+            }
+            function draw(t) {
+                gl.uniform1f(uTime, t);
+                gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+            }
+
+            window.addEventListener('resize', resize);
+            resize();
+
+            if (reduced) { draw(2.0); return; }
+            const t0 = performance.now();
+            let last = 0;
+            (function loop(now) {
+                if (now - last >= 1000 / FPS) {
+                    last = now;
+                    draw(((now || 0) - t0) / 1000 * SPEED);
+                }
+                requestAnimationFrame(loop);
+            })(t0);
+        })();
+    </script>
 </body>
 </html>
