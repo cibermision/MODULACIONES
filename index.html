@@ -293,42 +293,51 @@
             padding: 24px;
             background: rgba(13, 13, 17, 0.78);
             backdrop-filter: blur(6px);
-            overflow-y: auto;
             animation: crewFade 0.2s ease;
         }
         .crew-modal[hidden] { display: none; }
 
         .crew-modal-box {
-            position: relative;
+            display: flex;
+            flex-direction: column;
             width: 100%;
             max-width: 760px;
             max-height: calc(100vh - 48px);
-            overflow-y: auto;
-            padding: 32px 32px 28px;
+            max-height: calc(100dvh - 48px);
             background: rgba(22, 22, 29, 0.97);
             border: 1px solid var(--card-border);
             border-radius: 12px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
         }
 
-        .crew-modal-box h3 {
+        /* Cabecera fija: la X siempre queda a mano aunque la bio sea larga */
+        .crew-modal-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 18px 20px 14px 28px;
+            border-bottom: 1px solid var(--card-border);
+            flex-shrink: 0;
+        }
+
+        .crew-modal-head h3 {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--text-bright);
-            margin: 0 40px 20px 0;
+            margin: 0;
         }
 
         .crew-modal-close {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            width: 40px;
-            height: 40px;
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
             border: 1px solid var(--card-border);
             border-radius: 50%;
             background: none;
             color: var(--text-bright);
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             line-height: 1;
             cursor: pointer;
             transition: border-color 0.2s ease, color 0.2s ease;
@@ -336,16 +345,49 @@
         .crew-modal-close:hover { border-color: var(--accent-color); color: var(--accent-color); }
         .crew-modal-close:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 2px; }
 
+        .crew-modal-body {
+            padding: 24px 28px 28px;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+
         .crew-modal .crew-layout { grid-template-columns: 160px 1fr; padding-bottom: 0; }
+
+        .crew-initials {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            background: rgba(138, 115, 255, 0.12);
+            color: var(--accent-color);
+            font-family: var(--font-heading);
+            font-size: 2.4rem;
+            font-weight: 600;
+        }
 
         @keyframes crewFade { from { opacity: 0; } to { opacity: 1; } }
 
         @media (max-width: 768px) {
-            .crew-modal { align-items: flex-start; padding: 16px; }
-            .crew-modal-box { padding: 24px 20px; max-height: none; }
-            .crew-modal .crew-layout { grid-template-columns: 1fr; }
-            .crew-modal .crew-img { max-width: 160px; }
+            .crew-modal { padding: 12px; }
+            .crew-modal-box { max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); }
+            .crew-modal-head { padding: 14px 14px 12px 20px; }
+            .crew-modal-head h3 { font-size: 1.2rem; }
+            .crew-modal-body { padding: 20px; }
+            .crew-modal .crew-layout { grid-template-columns: 1fr; gap: 16px; }
+            .crew-modal .crew-img, .crew-modal .crew-initials { width: 120px; max-width: 120px; }
+            .crew-modal .crew-initials { font-size: 2rem; }
         }
+
+        @media (max-width: 600px) {
+            .crew-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+            .crew-tab { padding: 18px 10px; font-size: 1rem; }
+            .crew-tab:last-child:nth-child(odd) { grid-column: 1 / -1; }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             .crew-modal { animation: none; }
             .crew-tab { transition: none; }
@@ -560,12 +602,12 @@
                 </p>
                 
                 <div class="gallery-grid">
-                    <div class="gallery-item"><img src="imagenes/archivo/evento1.jpg" alt="Registro 1" onerror="this.src='https://via.placeholder.com/600x400/16161d/8A73FF?text=Evento+1'"></div>
-                    <div class="gallery-item"><img src="imagenes/archivo/evento2.jpg" alt="Registro 2" onerror="this.src='https://via.placeholder.com/600x400/16161d/8A73FF?text=Evento+2'"></div>
-                    <div class="gallery-item"><img src="imagenes/archivo/evento3.jpg" alt="Registro 3" onerror="this.src='https://via.placeholder.com/600x400/16161d/8A73FF?text=Evento+3'"></div>
-                    <div class="gallery-item"><img src="imagenes/archivo/evento4.jpg" alt="Registro 4" onerror="this.src='https://via.placeholder.com/600x400/16161d/8A73FF?text=Evento+4'"></div>
-                    <div class="gallery-item"><img src="imagenes/archivo/evento5.jpg" alt="Registro 5" onerror="this.src='https://via.placeholder.com/600x400/16161d/8A73FF?text=Evento+5'"></div>
-                    <div class="gallery-item"><img src="imagenes/archivo/evento6.jpg" alt="Registro 6" onerror="this.src='https://via.placeholder.com/600x400/16161d/8A73FF?text=Evento+6'"></div>
+                    <div class="gallery-item"><img src="imagenes/archivo/evento1.jpg" alt="Registro 1"></div>
+                    <div class="gallery-item"><img src="imagenes/archivo/evento2.jpg" alt="Registro 2"></div>
+                    <div class="gallery-item"><img src="imagenes/archivo/evento3.jpg" alt="Registro 3"></div>
+                    <div class="gallery-item"><img src="imagenes/archivo/evento4.jpg" alt="Registro 4"></div>
+                    <div class="gallery-item"><img src="imagenes/archivo/evento5.jpg" alt="Registro 5"></div>
+                    <div class="gallery-item"><img src="imagenes/archivo/evento6.jpg" alt="Registro 6"></div>
                 </div>
             </div>
         </section>
@@ -582,7 +624,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/roco.jpg" alt="Roco Collado" class="crew-img" onerror="this.src='https://via.placeholder.com/300x300/16161d/8A73FF?text=Roco+Collado'">
+                        <img src="imagenes/equipo/roco.jpg" alt="Roco Collado" class="crew-img">
                         <div>
                             <p>Con una amplia trayectoria dentro de la escena electrónica independiente, su trabajo se mueve entre el techno, el micro minimal y el dubby techno, con una marcada inclinación hacia la experimentación analógica. Actualmente centra su práctica en la creación musical a través de un sistema Eurorack modular, donde la improvisación y la síntesis sustractiva definen una estética basada en el control del voltaje y la interacción física con el sonido.</p><br>
                             <p>Inició su carrera en los años 90 con Formula 3000, proyecto con el que editó álbumes clave como Señor La Muerte, 3000 Lapsus de Muerte y Perfectos Ojos Rojos, en sellos como TSD Records, EPSA Music y Manteca Records. Posteriormente formó parte de Dawy y Los Estrellados, Las Bodas Químicas y Da_Club, ampliando su búsqueda hacia formatos híbridos entre electrónica, canción y performance. Entre sus lanzamientos más recientes se destacan Pulso de Vida (2019), Gravedad de Ley (2021), Onna Bugeisha (2022), Razones Poderosas (2024) y Troter 1Volt/Oct (2024).</p><br>
@@ -601,7 +643,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/bianca.jpg" alt="Bianca Leveroni" class="crew-img" onerror="this.src='https://via.placeholder.com/300x300/16161d/8A73FF?text=Bianca+Leveroni'">
+                        <img src="imagenes/equipo/bianca.jpg" alt="Bianca Leveroni" class="crew-img">
                         <div>
                             <p>Bianca Leveroni es artista visual y VJ, formada en la Universidad Nacional de las Artes (UNA), con especialización en artes audiovisuales. Desarrolla su trabajo en el campo del audiovisual en vivo, articulando práctica artística, operación técnica y formación académica.</p><br>
                             <p>Se desempeña como operadora profesional en teatros y espectáculos en vivo, participando en producciones musicales y escénicas de mediana y gran escala, tanto a nivel nacional como internacional, con experiencia en distintos países del Cono Sur. Su rol abarca la operación de sistemas complejos de proyección y control, la coordinación técnica con otros equipos y la integración de imagen en contextos performáticos diversos.</p><br>
@@ -620,7 +662,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/lihuel.jpg" alt="Lihuel Sosa" class="crew-img" onerror="this.src='https://via.placeholder.com/300x300/16161d/8A73FF?text=Lihuel+Sosa'">
+                        <img src="imagenes/equipo/lihuel.jpg" alt="Lihuel Sosa" class="crew-img">
                         <div>
                             <p>Lihuel Sosa es un artista sonoro que construye tanto la música como los instrumentos con los que la produce. Su trabajo se inscribe en el territorio de la electrónica, transitando desde estructuras cercanas al techno y el house hasta paisajes ambient, texturas de ruido y formas más abiertas de experimentación sonora.</p><br>
                             <p>En el directo, su enfoque es plenamente performático. Parte de ideas mínimas —patrones rítmicos, gestos simples, relaciones básicas entre señales— y desarrolla sus piezas en tiempo real a través del uso de hardware y máquinas. El set no se basa en secuencias cerradas ni material predefinido, sino en la construcción progresiva del sonido, con una clara preferencia por lo táctil y lo físico frente a la computadora como interfaz.</p><br>
@@ -640,7 +682,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/dan.jpg" alt="Dan Chelger" class="crew-img" onerror="this.src='https://via.placeholder.com/300x300/16161d/8A73FF?text=Dan+Chelger'">
+                        <img src="imagenes/equipo/dan.jpg" alt="Dan Chelger" class="crew-img">
                         <div>
                             <p>Formado en Imagen y Sonido (UBA) y especializado en dirección, documental y postproducción, trabajó en televisión, cine y publicidad, dirigiendo proyectos para Danone, YPF, Unilever, Secretaría de Turismo, INTI, CNEA e INET entre otros, además de coordinar servicios audiovisuales para eventos deportivos como los JJOO de la Juventud Buenos Aires 2018, los Juegos Panamericanos Santiago 2023 y el campus del Equipo Argentino en Qatar 2022.</p><br>
                             <p>Su práctica artística se centra en la síntesis de video, entendida como un lenguaje visual autónomo. Combina hardware —sintetizadores, procesadores, desarrollos DIY— con entornos digitales de su propia autoría, incluyendo plugins y sistemas de videosíntesis que expanden la experiencia del hardware al software. Ha presentado obras en CCEBA y Tecnópolis, y participado en festivales y eventos como Intermediale (Polonia), UMF, Aleatorio, Teorema, Videonica, Flashparty, Buenos Aires Outrun y DVNE Park.</p><br>
@@ -660,7 +702,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/evangelina.jpg" alt="Evangelina Moldú" class="crew-img" onerror="this.src='https://via.placeholder.com/300x300/16161d/8A73FF?text=Evangelina+Moldu'">
+                        <img src="imagenes/equipo/evangelina.jpg" alt="Evangelina Moldú" class="crew-img">
                         <div>
                             <p>Evangelina Moldú es artista multimedial y electrónica. Nació en Puerto Madryn, Argentina.</p><br>
                             <p>Su práctica cruza lo sonoro, lo visual y lo performático. Trabaja con programación, síntesis de audio, instalación y video, y construye sus propias herramientas e interfaces. Los procesos digitales y analógicos son para ella parte de un mismo sistema.</p><br>
@@ -740,8 +782,9 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){set(false);
             modal.setAttribute('aria-modal', 'true');
             modal.setAttribute('aria-labelledby', 'crewModalTitle');
             modal.innerHTML = '<div class="crew-modal-box">' +
-                '<button type="button" class="crew-modal-close" aria-label="Cerrar">&times;</button>' +
-                '<h3 id="crewModalTitle"></h3><div class="crew-modal-body"></div></div>';
+                '<div class="crew-modal-head"><h3 id="crewModalTitle"></h3>' +
+                '<button type="button" class="crew-modal-close" aria-label="Cerrar">&times;</button></div>' +
+                '<div class="crew-modal-body"></div></div>';
             document.body.appendChild(modal);
 
             const box = modal.querySelector('.crew-modal-box');
@@ -750,13 +793,39 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape'){set(false);
             const closeBtn = modal.querySelector('.crew-modal-close');
             let opener = null;
 
+            // Foto: prueba otras extensiones/mayúsculas y, si no hay ninguna, muestra las iniciales
+            function loadPhoto(img, name) {
+                if (!img) return;
+                const src = img.getAttribute('src') || '';
+                const m = src.match(/^(.*\/)?([^\/]+?)(\.[A-Za-z0-9]+)?$/);
+                const dir = (m && m[1]) || '', stem = (m && m[2]) || '';
+                const cap = stem.charAt(0).toUpperCase() + stem.slice(1);
+                const exts = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG'];
+                const tries = [];
+                [stem, cap].forEach(st => exts.forEach(ex => tries.push(dir + st + '.' + ex)));
+                const queue = tries.filter(t => t !== src);
+                img.removeAttribute('onerror');
+                img.onerror = function () {
+                    const next = queue.shift();
+                    if (next) { img.src = next; return; }
+                    img.onerror = null;
+                    const ph = document.createElement('div');
+                    ph.className = 'crew-initials';
+                    ph.setAttribute('aria-hidden', 'true');
+                    ph.textContent = name.split(' ').map(w => w[0]).slice(0, 2).join('');
+                    img.replaceWith(ph);
+                };
+            }
+
             function open(item, name, btn) {
                 opener = btn;
                 title.textContent = name;
                 body.innerHTML = '';
-                body.appendChild(item.querySelector('.crew-layout').cloneNode(true));
+                const layout = item.querySelector('.crew-layout').cloneNode(true);
+                body.appendChild(layout);
+                loadPhoto(layout.querySelector('.crew-img'), name);
                 modal.hidden = false;
-                box.scrollTop = 0;
+                body.scrollTop = 0;
                 document.body.style.overflow = 'hidden';
                 closeBtn.focus();
             }
