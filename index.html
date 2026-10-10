@@ -255,7 +255,7 @@
             border: 1px solid var(--card-border);
         }
 
-        /* Equipo: miniaturas circulares optimizadas */
+        /* Equipo: miniaturas circulares */
         .crew-tabs {
             display: flex;
             flex-wrap: wrap;
@@ -813,7 +813,7 @@
     </script>
 
     <script>
-        // Equipo: miniaturas optimizadas para carga veloz + popup
+        // Equipo: miniaturas circulares con fallback de extensiones y foto en modal
         (function () {
             const crew = document.getElementById('crew');
             if (!crew) return;
@@ -838,12 +838,39 @@
             const closeBtn = modal.querySelector('.crew-modal-close');
             let opener = null;
 
+            function loadPhotoWithFallback(img, name) {
+                if (!img) return;
+                const src = img.getAttribute('src') || '';
+                if (!src) return;
+
+                const m = src.match(/^(.*\/)?([^\/]+?)(\.[A-Za-z0-9]+)?$/);
+                const dir = (m && m[1]) || '', stem = (m && m[2]) || '';
+                const exts = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
+                let idx = 0;
+
+                img.onerror = function () {
+                    if (idx < exts.length) {
+                        img.src = dir + stem + '.' + exts[idx++];
+                    } else {
+                        img.onerror = null;
+                        const initials = document.createElement('div');
+                        initials.className = 'crew-avatar-initials';
+                        initials.textContent = name.split(' ').map(w => w[0]).slice(0, 2).join('');
+                        img.replaceWith(initials);
+                    }
+                };
+            }
+
             function open(item, name, btn) {
                 opener = btn;
                 title.textContent = name;
                 body.innerHTML = '';
                 const layout = item.querySelector('.crew-layout').cloneNode(true);
                 body.appendChild(layout);
+
+                const modalImg = layout.querySelector('.crew-img');
+                if (modalImg) loadPhotoWithFallback(modalImg, name);
+
                 modal.hidden = false;
                 body.scrollTop = 0;
                 document.body.style.overflow = 'hidden';
@@ -861,13 +888,7 @@
             modal.addEventListener('click', e => { if (e.target === modal) close(); });
             document.addEventListener('keydown', e => {
                 if (modal.hidden) return;
-                if (e.key === 'Escape') { close(); return; }
-                if (e.key === 'Tab') {
-                    const f = modal.querySelectorAll('button, a[href]');
-                    const first = f[0], last = f[f.length - 1];
-                    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-                    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-                }
+                if (e.key === 'Escape') close();
             });
 
             // Contenedor de avatares circulares
@@ -889,17 +910,10 @@
                 if (imgSrc) {
                     const avatarImg = document.createElement('img');
                     avatarImg.className = 'crew-avatar-img';
-                    avatarImg.src = imgSrc;
                     avatarImg.alt = name;
-                    avatarImg.loading = 'lazy';
-                    avatarImg.decoding = 'async';
-                    avatarImg.onerror = function () {
-                        const initials = document.createElement('div');
-                        initials.className = 'crew-avatar-initials';
-                        initials.textContent = name.split(' ').map(w => w[0]).slice(0, 2).join('');
-                        avatarImg.replaceWith(initials);
-                    };
+                    avatarImg.src = imgSrc;
                     ring.appendChild(avatarImg);
+                    loadPhotoWithFallback(avatarImg, name);
                 } else {
                     const initials = document.createElement('div');
                     initials.className = 'crew-avatar-initials';
@@ -913,7 +927,6 @@
 
                 b.appendChild(ring);
                 b.appendChild(nameLabel);
-
                 b.addEventListener('click', () => open(item, name, b));
                 tabs.appendChild(b);
             });
