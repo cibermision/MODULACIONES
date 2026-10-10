@@ -72,26 +72,12 @@
             align-items: center;
         }
 
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .logo-text {
+        .bar-title {
             font-family: var(--font-heading);
-            font-size: 1.4rem;
+            font-size: 1.1rem;
             font-weight: 700;
-            letter-spacing: -0.03em;
             color: var(--text-bright);
-            text-transform: uppercase;
+            text-decoration: none;
         }
 
         nav ul {
@@ -286,12 +272,17 @@
         .crew-avatar-ring {
             width: 110px;
             height: 110px;
+            min-width: 110px;
+            min-height: 110px;
             border-radius: 50%;
             padding: 3px;
             background: linear-gradient(135deg, rgba(255,255,255,0.15), var(--card-border));
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             transition: background 0.3s ease, box-shadow 0.3s ease;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .crew-tab:hover .crew-avatar-ring {
@@ -318,6 +309,7 @@
             color: var(--accent-color);
             font-size: 2rem;
             font-weight: 700;
+            line-height: 1;
         }
 
         .crew-tab-name {
@@ -330,15 +322,6 @@
 
         .crew-tab:hover .crew-tab-name {
             color: var(--accent-color);
-        }
-
-        .crew-tab:focus-visible {
-            outline: none;
-        }
-
-        .crew-tab:focus-visible .crew-avatar-ring {
-            outline: 3px solid var(--accent-color);
-            outline-offset: 4px;
         }
 
         #crew.has-tabs .accordion-item { display: none; }
@@ -402,7 +385,6 @@
             transition: border-color 0.2s ease, color 0.2s ease;
         }
         .crew-modal-close:hover { border-color: var(--accent-color); color: var(--accent-color); }
-        .crew-modal-close:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 2px; }
 
         .crew-modal-body {
             padding: 24px 28px 28px;
@@ -438,19 +420,13 @@
             .crew-modal-body { padding: 20px; }
             .crew-modal .crew-layout { grid-template-columns: 1fr; gap: 16px; }
             .crew-modal .crew-img, .crew-modal .crew-initials { width: 120px; max-width: 120px; }
-            .crew-modal .crew-initials { font-size: 2rem; }
         }
 
         @media (max-width: 600px) {
             .crew-tabs { gap: 24px 16px; }
             .crew-tab { width: 110px; }
-            .crew-avatar-ring { width: 88px; height: 88px; }
+            .crew-avatar-ring { width: 88px; height: 88px; min-width: 88px; min-height: 88px; }
             .crew-tab-name { font-size: 0.9rem; }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .crew-modal { animation: none; }
-            .crew-tab { transition: none; }
         }
 
         .social-link {
@@ -461,7 +437,6 @@
             font-weight: 500;
         }
 
-        /* Contacto en fila */
         .contact-row {
             display: flex;
             flex-wrap: wrap;
@@ -484,16 +459,6 @@
 
         .contact-item:hover { border-color: var(--accent-color); }
         .contact-item .icon, .social-link .icon { color: var(--accent-color); flex-shrink: 0; display: block; }
-        .social-link { transition: opacity 0.2s ease; }
-        .social-link:hover { opacity: 0.75; }
-
-        .contact-label {
-            font-size: 0.75rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            opacity: 0.7;
-            color: var(--text-bright);
-        }
 
         .contact-value {
             color: var(--accent-color);
@@ -514,22 +479,6 @@
             border-radius: 0 4px 4px 0;
         }
 
-        .support-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 16px;
-        }
-
-        .support-tag {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--card-border);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
         footer {
             padding: 40px 0;
             text-align: center;
@@ -538,39 +487,21 @@
             border-top: 1px solid var(--card-border);
         }
 
-        @media (max-width: 768px) {
-            .crew-layout {
-                grid-template-columns: 1fr;
-            }
-            .nav-wrapper {
-                flex-direction: column;
-                gap: 16px;
-            }
-            nav ul {
-                gap: 12px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-    
         /* Primera pantalla */
         html { scroll-behavior: smooth; }
         .cover { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1rem; position: relative; text-align: center; }
         .cover .logo { width: min(82vw, 760px); height: auto; max-height: 55svh; object-fit: contain; }
         .chev { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); color: var(--text-bright); display: block; width: 48px; height: 48px; }
-        /* Tira de apoyos animada */
+        
+        /* Tira de apoyos animada (Restaurada para marquesina infinita) */
         .strip { overflow: hidden; background: #09090c; padding: 2.2rem 0; white-space: nowrap; margin-top: 4rem; }
         .strip > div { display: inline-flex; gap: 4rem; padding-right: 4rem; animation: mq 22s linear infinite; }
         .strip:hover > div { animation-play-state: paused; }
         .strip a { font-family: var(--font-heading); font-size: 1.5rem; color: var(--text-bright); text-decoration: none; }
         .strip a:hover { color: var(--accent-color); }
         @keyframes mq { to { transform: translateX(-100%); } }
-        @media (prefers-reduced-motion: reduce) { .strip > div { animation: none; } .strip { white-space: normal; } html { scroll-behavior: auto; } }
-    
-        /* Barra con menú hamburguesa */
-        .bar-title { font-family: var(--font-heading); font-size: 1.1rem; font-weight: 700; color: var(--text-bright); text-decoration: none; }
+
         .menu-btn { background: none; border: 1px solid var(--card-border); border-radius: 10px; width: 44px; height: 44px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; }
-        .menu-btn:focus-visible, .bar-title:focus-visible, .menu-panel a:focus-visible { outline: 3px solid var(--accent-color); outline-offset: 3px; }
         .menu-btn span { display: block; width: 22px; height: 2px; background: var(--text-bright); transition: transform .3s ease, opacity .2s ease; }
         .menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
@@ -580,15 +511,14 @@
         .menu-panel ul { flex-direction: column; gap: 0; }
         .menu-panel a { display: block; padding: 14px 16px; font-size: 1rem; border-radius: 8px; color: var(--text-main); }
         .menu-panel a:hover { background: rgba(138,115,255,.12); }
-        @media (prefers-reduced-motion: reduce) { .menu-panel, .menu-btn span { transition: none; } }
     </style>
 </head>
 <body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
-    <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></symbol>
-    <symbol id="i-youtube" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></symbol>
-    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
-</svg>
+        <symbol id="i-instagram" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></symbol>
+        <symbol id="i-youtube" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2C2 8.8 2 12 2 12s0 3.2.4 4.8a2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8c.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></symbol>
+        <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+    </svg>
 
     <canvas id="mosaic-canvas" aria-hidden="true"></canvas>
 
@@ -683,7 +613,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/roco.jpg" alt="Roco Collado" class="crew-img" loading="lazy">
+                        <img src="imagenes/equipo/roco.jpg" alt="Roco Collado" class="crew-img">
                         <div>
                             <p>Con una amplia trayectoria dentro de la escena electrónica independiente, su trabajo se mueve entre el techno, el micro minimal y el dubby techno, con una marcada inclinación hacia la experimentación analógica. Actualmente centra su práctica en la creación musical a través de un sistema Eurorack modular, donde la improvisación y la síntesis sustractiva definen una estética basada en el control del voltaje y la interacción física con el sonido.</p><br>
                             <p>Inició su carrera en los años 90 con Formula 3000, proyecto con el que editó álbumes clave como Señor La Muerte, 3000 Lapsus de Muerte y Perfectos Ojos Rojos, en sellos como TSD Records, EPSA Music y Manteca Records. Posteriormente formó parte de Dawy y Los Estrellados, Las Bodas Químicas y Da_Club, ampliando su búsqueda hacia formatos híbridos entre electrónica, canción y performance. Entre sus lanzamientos más recientes se destacan Pulso de Vida (2019), Gravedad de Ley (2021), Onna Bugeisha (2022), Razones Poderosas (2024) y Troter 1Volt/Oct (2024).</p><br>
@@ -702,7 +632,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/bianca.jpg" alt="Bianca Leveroni" class="crew-img" loading="lazy">
+                        <img src="imagenes/equipo/bianca.jpg" alt="Bianca Leveroni" class="crew-img">
                         <div>
                             <p>Bianca Leveroni es artista visual y VJ, formada en la Universidad Nacional de las Artes (UNA), con especialización en artes audiovisuales. Desarrolla su trabajo en el campo del audiovisual en vivo, articulando práctica artística, operación técnica y formación académica.</p><br>
                             <p>Se desempeña como operadora profesional en teatros y espectáculos en vivo, participando en producciones musicales y escénicas de mediana y gran escala, tanto a nivel nacional como internacional, con experiencia en distintos países del Cono Sur. Su rol abarca la operación de sistemas complejos de proyección y control, la coordinación técnica con otros equipos y la integración de imagen en contextos performáticos diversos.</p><br>
@@ -721,7 +651,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/lihuel.jpg" alt="Lihuel Sosa" class="crew-img" loading="lazy">
+                        <img src="imagenes/equipo/lihuel.jpg" alt="Lihuel Sosa" class="crew-img">
                         <div>
                             <p>Lihuel Sosa es un artista sonoro que construye tanto la música como los instrumentos con los que la produce. Su trabajo se inscribe en el territorio de la electrónica, transitando desde estructuras cercanas al techno y el house hasta paisajes ambient, texturas de ruido y formas más abiertas de experimentación sonora.</p><br>
                             <p>En el directo, su enfoque es plenamente performático. Parte de ideas mínimas —patrones rítmicos, gestos simples, relaciones básicas entre señales— y desarrolla sus piezas en tiempo real a través del uso de hardware y máquinas. El set no se basa en secuencias cerradas ni material predefinido, sino en la construcción progresiva del sonido, con una clara preferencia por lo táctil y lo físico frente a la computadora como interfaz.</p><br>
@@ -741,7 +671,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/dan.jpg" alt="Dan Chelger" class="crew-img" loading="lazy">
+                        <img src="imagenes/equipo/dan.jpg" alt="Dan Chelger" class="crew-img">
                         <div>
                             <p>Formado en Imagen y Sonido (UBA) y especializado en dirección, documental y postproducción, trabajó en televisión, cine y publicidad, dirigiendo proyectos para Danone, YPF, Unilever, Secretaría de Turismo, INTI, CNEA e INET entre otros, además de coordinar servicios audiovisuales para eventos deportivos como los JJOO de la Juventud Buenos Aires 2018, los Juegos Panamericanos Santiago 2023 y el campus del Equipo Argentino en Qatar 2022.</p><br>
                             <p>Su práctica artística se centra en la síntesis de video, entendida como un lenguaje visual autónomo. Combina hardware —sintetizadores, procesadores, desarrollos DIY— con entornos digitales de su propia autoría, incluyendo plugins y sistemas de videosíntesis que expanden la experiencia del hardware al software. Ha presentado obras en CCEBA y Tecnópolis, y participado en festivales y eventos como Intermediale (Polonia), UMF, Aleatorio, Teorema, Videonica, Flashparty, Buenos Aires Outrun y DVNE Park.</p><br>
@@ -761,7 +691,7 @@
                 </button>
                 <div class="accordion-content">
                     <div class="crew-layout">
-                        <img src="imagenes/equipo/evangelina.jpg" alt="Evangelina Moldú" class="crew-img" loading="lazy">
+                        <img src="imagenes/equipo/evangelina.jpg" alt="Evangelina Moldú" class="crew-img">
                         <div>
                             <p>Evangelina Moldú es artista multimedial y electrónica. Nació en Puerto Madryn, Argentina.</p><br>
                             <p>Su práctica cruza lo sonoro, lo visual y lo performático. Trabaja con programación, síntesis de audio, instalación y video, y construye sus propias herramientas e interfaces. Los procesos digitales y analógicos son para ella parte de un mismo sistema.</p><br>
@@ -792,7 +722,29 @@
         </section>
     </main>
 
-    <div class="strip" aria-label="Con el apoyo de"><div><a href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a><a href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a><a href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a><a href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a><a href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a><a href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a><a href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a><a href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a></div><div aria-hidden="true"><a tabindex="-1" href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a><a tabindex="-1" href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a><a tabindex="-1" href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a><a tabindex="-1" href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a><a tabindex="-1" href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a><a tabindex="-1" href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a><a tabindex="-1" href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a><a tabindex="-1" href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a></div></div>
+    <!-- Tira de apoyos animada (Duplicación restaurada para loop infinito sin cortes) -->
+    <div class="strip" aria-label="Con el apoyo de">
+        <div>
+            <a href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a>
+            <a href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a>
+            <a href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a>
+            <a href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a>
+            <a href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a>
+            <a href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a>
+            <a href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a>
+            <a href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a>
+        </div>
+        <div aria-hidden="true">
+            <a tabindex="-1" href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a>
+            <a tabindex="-1" href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a>
+            <a tabindex="-1" href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a>
+            <a tabindex="-1" href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a>
+            <a tabindex="-1" href="https://www.instagram.com/olivellamodular/" target="_blank" rel="noopener">@olivellamodular</a>
+            <a tabindex="-1" href="https://www.instagram.com/tercerbrazoestudio/" target="_blank" rel="noopener">@tercerbrazoestudio</a>
+            <a tabindex="-1" href="https://www.instagram.com/caseslihuel/" target="_blank" rel="noopener">@caseslihuel</a>
+            <a tabindex="-1" href="https://www.instagram.com/e97.com.ar/" target="_blank" rel="noopener">@e97.com.ar</a>
+        </div>
+    </div>
 
     <footer>
         <div class="container">
@@ -813,14 +765,13 @@
     </script>
 
     <script>
-        // Equipo: miniaturas circulares con fallback de extensiones y foto en modal
+        // Equipo: Modal y Tabs con iniciales blindadas
         (function () {
             const crew = document.getElementById('crew');
             if (!crew) return;
             const items = Array.from(crew.querySelectorAll('.accordion-item'));
             if (!items.length) return;
 
-            // Modal
             const modal = document.createElement('div');
             modal.className = 'crew-modal';
             modal.hidden = true;
@@ -838,29 +789,6 @@
             const closeBtn = modal.querySelector('.crew-modal-close');
             let opener = null;
 
-            function loadPhotoWithFallback(img, name) {
-                if (!img) return;
-                const src = img.getAttribute('src') || '';
-                if (!src) return;
-
-                const m = src.match(/^(.*\/)?([^\/]+?)(\.[A-Za-z0-9]+)?$/);
-                const dir = (m && m[1]) || '', stem = (m && m[2]) || '';
-                const exts = ['jpg', 'png', 'jpeg', 'webp', 'JPG', 'PNG', 'JPEG'];
-                let idx = 0;
-
-                img.onerror = function () {
-                    if (idx < exts.length) {
-                        img.src = dir + stem + '.' + exts[idx++];
-                    } else {
-                        img.onerror = null;
-                        const initials = document.createElement('div');
-                        initials.className = 'crew-avatar-initials';
-                        initials.textContent = name.split(' ').map(w => w[0]).slice(0, 2).join('');
-                        img.replaceWith(initials);
-                    }
-                };
-            }
-
             function open(item, name, btn) {
                 opener = btn;
                 title.textContent = name;
@@ -869,7 +797,14 @@
                 body.appendChild(layout);
 
                 const modalImg = layout.querySelector('.crew-img');
-                if (modalImg) loadPhotoWithFallback(modalImg, name);
+                if (modalImg) {
+                    modalImg.onerror = function() {
+                        const initials = document.createElement('div');
+                        initials.className = 'crew-initials';
+                        initials.textContent = name.split(' ').map(w => w[0]).slice(0, 2).join('');
+                        modalImg.replaceWith(initials);
+                    };
+                }
 
                 modal.hidden = false;
                 body.scrollTop = 0;
@@ -891,7 +826,6 @@
                 if (e.key === 'Escape') close();
             });
 
-            // Contenedor de avatares circulares
             const tabs = document.createElement('div');
             tabs.className = 'crew-tabs';
 
@@ -911,9 +845,14 @@
                     const avatarImg = document.createElement('img');
                     avatarImg.className = 'crew-avatar-img';
                     avatarImg.alt = name;
+                    avatarImg.onerror = function () {
+                        const initials = document.createElement('div');
+                        initials.className = 'crew-avatar-initials';
+                        initials.textContent = name.split(' ').map(w => w[0]).slice(0, 2).join('');
+                        avatarImg.replaceWith(initials);
+                    };
                     avatarImg.src = imgSrc;
                     ring.appendChild(avatarImg);
-                    loadPhotoWithFallback(avatarImg, name);
                 } else {
                     const initials = document.createElement('div');
                     initials.className = 'crew-avatar-initials';
@@ -937,7 +876,7 @@
     </script>
 
     <script>
-        // Fondo: Grid Mosaic en WebGL
+        // Fondo WebGL Mosaic ORIGINAL (Restaurado completo)
         (function () {
             const cv = document.getElementById('mosaic-canvas');
             const gl = cv.getContext('webgl', { premultipliedAlpha: false, antialias: false });
